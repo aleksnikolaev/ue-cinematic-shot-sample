@@ -6,7 +6,7 @@ SEQ_NAME = "LS_Shot"
 FULL = SEQ_PATH + "/" + SEQ_NAME
 LEVEL = "/Game/Shot/L_Shot"
 FPS = 30
-DUR = 2.0
+DUR = 2.8
 STEPS = []
 INFO = {}
 
@@ -62,15 +62,15 @@ INFO["transform_channels"] = len(chans)
 
 target = ue.Vector(140, 15, 108)
 moves = [
-    (0.00, ue.Vector(76, 770, 180)),
-    (0.70, ue.Vector(73, 742, 173)),
-    (1.30, ue.Vector(70, 720, 167)),
+    (0.00, ue.Vector(78, 782, 182)),
+    (1.10, ue.Vector(74, 748, 174)),
+    (2.20, ue.Vector(70, 720, 167)),
     # толчок камеры на вспышке, четыре кадра
-    (1.37, ue.Vector(64, 713, 175)),
-    (1.40, ue.Vector(74, 724, 160)),
-    (1.43, ue.Vector(66, 715, 170)),
-    (1.47, ue.Vector(70, 719, 165)),
-    (2.00, ue.Vector(64, 706, 162)),
+    (2.27, ue.Vector(64, 713, 175)),
+    (2.30, ue.Vector(74, 724, 160)),
+    (2.33, ue.Vector(66, 715, 170)),
+    (2.37, ue.Vector(70, 719, 165)),
+    (2.80, ue.Vector(64, 706, 162)),
 ]
 errs = []
 for t, loc in moves:
@@ -91,9 +91,13 @@ anim_track = hero_b.add_track(ue.MovieSceneSkeletalAnimationTrack)
 idle = AL.load_asset("/Game/Characters/Mannequins/Anims/Unarmed/MM_Idle")
 charged = AL.load_asset("/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_ChargedAttack")
 s_atk = anim_track.add_section()
-s_atk.set_range_seconds(0.0, 1.8333 - 0.40)
+PLAY_RATE = 0.6
+s_atk.set_range_seconds(0.0, (1.8333 - 0.40) / PLAY_RATE)
 p = ue.MovieSceneSkeletalAnimationParams(animation=charged)
 p.set_editor_property("start_frame_offset", ue.FrameNumber(12))
+warp = ue.MovieSceneTimeWarpVariant()
+warp.set_fixed_play_rate(PLAY_RATE)
+p.set_editor_property("play_rate", warp)
 s_atk.set_editor_property("params", p)
 mark("animation")
 
@@ -101,7 +105,7 @@ mark("animation")
 try:
     n_track = beam_b.add_track(ue.MovieSceneNiagaraSystemTrack)
     n_sec = n_track.add_section()
-    n_sec.set_range_seconds(0.40, DUR)
+    n_sec.set_range_seconds(0.85, DUR)
     mark("beam track")
 except Exception as e:
     mark("beam track FAILED", beam_err=str(e))
