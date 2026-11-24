@@ -8,9 +8,13 @@ Nothing in this project was assembled by hand in the editor. The level, the
 lights, the camera move, the animation timing, the render settings and the
 render itself are four Python scripts and one command.
 
+![The shot](poster.png)
+
+The clip itself is [shot.mp4](shot.mp4), 45 frames at 30 fps.
+
 ## The shot
 
-2.0 seconds, 60 frames at 30 fps, 1920x1080, rendered through Movie Render Queue
+1.5 seconds, 45 frames at 30 fps, 1920x1080, rendered through Movie Render Queue
 with a deferred pass and one temporal sample. The character braces, an energy core
 builds at his hands, it releases, the beam carries across the frame.
 
