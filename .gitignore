@@ -12,3 +12,4 @@ scripts/frames
 # ассеты Epic из шаблонов движка, восстанавливаются командой из README
 CinematicShot/Content/Characters/
 CinematicShot/Content/LevelPrototyping/
+scripts/sheet
