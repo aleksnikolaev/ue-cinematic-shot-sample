@@ -76,11 +76,34 @@ except Exception:
     smc.set_skeletal_mesh(skm)
 mark("hero")
 
-beam = actors.spawn_actor_from_class(ue.NiagaraActor, ue.Vector(55, 0, 115), ue.Rotator(0, 0, 0))
+beam = actors.spawn_actor_from_class(ue.NiagaraActor, ue.Vector(0, 0, 0), ue.Rotator(0, 0, 0))
 beam.set_actor_label("Beam")
-beam.niagara_component.set_asset(load("/Game/EnergyBeamV2/FX/NS_EnergyChargeBeam"))
-beam.niagara_component.set_auto_activate(False)
-mark("beam")
+nc = beam.get_component_by_class(ue.NiagaraComponent)
+nc.set_asset(load("/Game/EnergyBeamV2/FX/NS_EnergyChargeBeam"))
+nc.set_auto_activate(False)
+# сгусток живёт в руке, иначе удар проходит мимо него
+SOCKET = "HandGrip_R" if smc.does_socket_exist("HandGrip_R") else "hand_r"
+beam.attach_to_component(smc, SOCKET,
+                         ue.AttachmentRule.SNAP_TO_TARGET,
+                         ue.AttachmentRule.SNAP_TO_TARGET,
+                         ue.AttachmentRule.KEEP_WORLD, False)
+# поворот не наследуем от кости: луч всегда бьёт туда, куда смотрит персонаж
+nc.set_editor_property("relative_scale3d", ue.Vector(0.35, 0.35, 0.35))
+rot_notes = []
+try:
+    nc.set_editor_property("absolute_rotation", True)
+    rot_notes.append("absolute_rotation")
+except Exception as e:
+    rot_notes.append("abs fail: %s" % e)
+for setter in ("set_world_rotation", "k2_set_world_rotation"):
+    if hasattr(nc, setter):
+        try:
+            getattr(nc, setter)(ue.Rotator(0, 0, 0), False, False)
+            rot_notes.append(setter)
+            break
+        except Exception as e:
+            rot_notes.append("%s fail: %s" % (setter, e))
+mark("beam", socket=SOCKET, rotation=rot_notes, beam_at=[round(v, 1) for v in (nc.get_world_location().x, nc.get_world_location().y, nc.get_world_location().z)])
 
 sky_atm = actors.spawn_actor_from_class(ue.SkyAtmosphere, ue.Vector(), ue.Rotator())
 sky_atm.set_actor_label("SkyAtmosphere")
@@ -116,17 +139,17 @@ fog = actors.spawn_actor_from_class(ue.ExponentialHeightFog, ue.Vector(0, 0, -12
 fog.set_actor_label("Fog")
 mark("lights")
 
-loc = ue.Vector(470, -355, 115)
-target = ue.Vector(20, 10, 120)
+loc = ue.Vector(70, 720, 168)
+target = ue.Vector(140, 15, 108)
 rot = ue.MathLibrary.find_look_at_rotation(loc, target)
 cam = actors.spawn_actor_from_class(ue.CineCameraActor, loc, rot)
 cam.set_actor_label("ShotCam")
 cc = cam.get_component_by_class(ue.CineCameraComponent)
-cc.set_editor_property("current_focal_length", 40.0)
+cc.set_editor_property("current_focal_length", 30.0)
 pp = cc.get_editor_property("post_process_settings")
 for prop, val in (("bloom_intensity", 0.45), ("auto_exposure_method", ue.AutoExposureMethod.AEM_MANUAL),
                   ("auto_exposure_apply_physical_camera_exposure", False),
-                  ("auto_exposure_bias", -0.9), ("motion_blur_amount", 0.0)):
+                  ("auto_exposure_bias", -1.45), ("motion_blur_amount", 0.0)):
     pp.set_editor_property("override_" + prop, True)
     pp.set_editor_property(prop, val)
 cc.set_editor_property("post_process_settings", pp)

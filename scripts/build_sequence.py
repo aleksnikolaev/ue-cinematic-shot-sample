@@ -60,17 +60,17 @@ tr.set_range_seconds(0.0, DUR)
 chans = tr.get_all_channels()
 INFO["transform_channels"] = len(chans)
 
-target = ue.Vector(20, 10, 120)
+target = ue.Vector(140, 15, 108)
 moves = [
-    (0.00, ue.Vector(520, -390, 128)),
-    (0.70, ue.Vector(498, -374, 122)),
-    (1.30, ue.Vector(480, -362, 116)),
+    (0.00, ue.Vector(76, 770, 180)),
+    (0.70, ue.Vector(73, 742, 173)),
+    (1.30, ue.Vector(70, 720, 167)),
     # толчок камеры на вспышке, четыре кадра
-    (1.37, ue.Vector(474, -358, 123)),
-    (1.40, ue.Vector(479, -364, 110)),
-    (1.43, ue.Vector(472, -355, 119)),
-    (1.47, ue.Vector(476, -360, 114)),
-    (2.00, ue.Vector(466, -350, 112)),
+    (1.37, ue.Vector(64, 713, 175)),
+    (1.40, ue.Vector(74, 724, 160)),
+    (1.43, ue.Vector(66, 715, 170)),
+    (1.47, ue.Vector(70, 719, 165)),
+    (2.00, ue.Vector(64, 706, 162)),
 ]
 errs = []
 for t, loc in moves:

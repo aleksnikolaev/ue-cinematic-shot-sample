@@ -61,24 +61,25 @@ mark("taps built")
 HLSL = """
 float3 base = c;
 
+// контур только по настоящим силуэтам, складки внутри модели не обводим
 float depthEdge = abs(dr.r - d0.r) + abs(dd.r - d0.r);
-depthEdge = saturate(depthEdge / max(d0.r * 0.03, 1.0));
+depthEdge = saturate(depthEdge / max(d0.r * 0.12, 1.0));
 
 float normalEdge = (1.0 - dot(n0, nr)) + (1.0 - dot(n0, nd));
-normalEdge = saturate(normalEdge * 7.0);
+normalEdge = saturate(normalEdge * 3.0);
 
-float edge = saturate(max(depthEdge, normalEdge * 0.85));
+float edge = saturate(max(depthEdge, normalEdge * 0.5));
 
+// лёгкая ступенчатость в средних тонах, градиенты и свечение не трогаем
 float lum = dot(base, float3(0.299, 0.587, 0.114));
-float steps = 5.0;
-// гамма-подъём до разбивки, иначе тени схлопываются в чёрный
-float lifted = pow(saturate(lum), 0.6);
-float banded = pow(floor(lifted * steps + 0.4) / steps, 1.0 / 0.6);
+float steps = 11.0;
+float lifted = pow(saturate(lum), 0.7);
+float banded = pow(floor(lifted * steps + 0.5) / steps, 1.0 / 0.7);
 float3 toned = base * (banded / max(lum, 0.0001));
-float keep = smoothstep(0.8, 1.3, lum);
-float3 col = lerp(toned, base, keep);
+float midband = smoothstep(0.03, 0.12, lum) * (1.0 - smoothstep(0.45, 0.85, lum));
+float3 col = lerp(base, toned, midband * 0.55);
 
-return col * (1.0 - edge * 0.8);
+return col * (1.0 - edge * 0.45);
 """
 
 custom = MAT.create_material_expression(mat, ue.MaterialExpressionCustom, -600, 0)

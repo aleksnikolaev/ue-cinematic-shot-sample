@@ -5,7 +5,7 @@ SEQ_PATH, SEQ_NAME = "/Game/Shot", "LS_Look"
 FULL = SEQ_PATH + "/" + SEQ_NAME
 FPS = 30
 HOLD = 6          # кадров на один ракурс
-START_T = 1.55    # момент разряда
+START_T = 1.30    # момент разряда
 STEPS = []
 INFO = {}
 def mark(s, **kw):
@@ -14,12 +14,12 @@ def mark(s, **kw):
         json.dump({"steps": STEPS, "info": INFO}, f, indent=1)
 
 CANDIDATES = [
-    ("a_over_shoulder", (-250, -150, 175), (300, 10, 120), 40.0),
-    ("b_three_quarter", (-170, -330, 150), (260, 40, 115), 35.0),
-    ("c_low_front",     (330, -300, 70),   (0, 0, 115),    50.0),
-    ("d_side_wide",     (120, -470, 130),  (120, 0, 110),  28.0),
-    ("e_high_back",     (-330, -90, 290),  (420, -20, 100), 35.0),
-    ("f_close_side",    (60, -260, 145),   (200, -10, 120), 45.0),
+    ("a_side",        (150, -620, 140),  (350, 20, 110),  35.0),
+    ("b_front_three", (520, -420, 130),  (40, 20, 115),   40.0),
+    ("c_shoulder",    (-330, -230, 190), (420, 60, 110),  35.0),
+    ("d_low_side",    (200, -430, 60),   (330, 10, 130),  45.0),
+    ("e_high_side",   (120, -520, 300),  (300, 30, 90),   35.0),
+    ("f_wide_side",   (300, -860, 180),  (320, 0, 110),   28.0),
 ]
 DUR = START_T + len(CANDIDATES) * HOLD / float(FPS)
 
@@ -76,14 +76,14 @@ mark("camera jumps", key_errors=errs[:3], duration=DUR)
 anim_track = hero_b.add_track(ue.MovieSceneSkeletalAnimationTrack)
 charged = AL.load_asset("/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_ChargedAttack")
 s_atk = anim_track.add_section()
-s_atk.set_range_seconds(0.0, 1.8333)
+s_atk.set_range_seconds(0.0, 1.8333 - 0.40)
 p = ue.MovieSceneSkeletalAnimationParams(animation=charged)
-p.set_editor_property("start_frame_offset", ue.FrameNumber(0))
+p.set_editor_property("start_frame_offset", ue.FrameNumber(12))
 s_atk.set_editor_property("params", p)
 mark("animation")
 
 n_sec = beam_b.add_track(ue.MovieSceneNiagaraSystemTrack).add_section()
-n_sec.set_range_seconds(1.05, DUR)
+n_sec.set_range_seconds(0.40, DUR)
 mark("beam")
 
 AL.save_asset(FULL)
