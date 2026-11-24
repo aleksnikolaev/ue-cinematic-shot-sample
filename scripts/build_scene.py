@@ -126,7 +126,7 @@ cc.set_editor_property("current_focal_length", 40.0)
 pp = cc.get_editor_property("post_process_settings")
 for prop, val in (("bloom_intensity", 0.45), ("auto_exposure_method", ue.AutoExposureMethod.AEM_MANUAL),
                   ("auto_exposure_apply_physical_camera_exposure", False),
-                  ("auto_exposure_bias", -2.0), ("motion_blur_amount", 0.0)):
+                  ("auto_exposure_bias", -0.9), ("motion_blur_amount", 0.0)):
     pp.set_editor_property("override_" + prop, True)
     pp.set_editor_property(prop, val)
 cc.set_editor_property("post_process_settings", pp)
