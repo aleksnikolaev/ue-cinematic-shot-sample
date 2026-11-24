@@ -1,0 +1,14 @@
+CinematicShot/Binaries/
+CinematicShot/Build/
+CinematicShot/DerivedDataCache/
+CinematicShot/Intermediate/
+CinematicShot/Saved/
+render/
+*.log
+scripts/frames_to_mp4
+scripts/frames
+.DS_Store
+
+# ассеты Epic из шаблонов движка, восстанавливаются командой из README
+CinematicShot/Content/Characters/
+CinematicShot/Content/LevelPrototyping/

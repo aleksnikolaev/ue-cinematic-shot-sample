@@ -1,0 +1,1 @@
+{"FileVersion":3,"EngineAssociation":"5.7","Description":"One cinematic shot: charged attack and beam, rendered through Movie Render Queue","Plugins":[{"Name":"Niagara","Enabled":true},{"Name":"MovieRenderPipeline","Enabled":true},{"Name":"PythonScriptPlugin","Enabled":true},{"Name":"SequencerScripting","Enabled":true}]}
